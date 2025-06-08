@@ -11,6 +11,10 @@
 <div class="dashboard">
     <header class="header">
         <h1>Monitor de Afluencia en Tiempo Real</h1>
+        <div class="url-form">
+            <input type="text" id="url-input" placeholder="Introduce la URL de la cámara">
+            <button id="start-btn">Iniciar Captura</button>
+        </div>
         <div class="stats">
             <div class="stat-card total">
                 <span class="stat-value" id="total-people">0</span>
@@ -23,15 +27,15 @@
         </div>
     </header>
 
+    <!-- Filtro de ubicaciones -->
     <div class="location-filter">
         <select id="location-select">
             <option value="all">Todas las ubicaciones</option>
-            <!-- Opciones se llenarán con JS -->
         </select>
     </div>
 
     <div class="captures-grid" id="captures-container">
-        <!-- Las capturas se insertarán aquí con JavaScript -->
+        <!-- Capturas generadas con JS -->
     </div>
 
     <div class="real-time-indicator">

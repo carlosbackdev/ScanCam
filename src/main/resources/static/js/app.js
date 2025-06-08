@@ -9,20 +9,19 @@ function fetchCaptures() {
             return response.json();
         })
         .then(data => {
-            var dataList = data || [];
+            const dataList = data || [];
+
             if (captures.length < dataList.length) {
-                captures = data;
-                renderCaptures();
+                captures = dataList;
+                renderCaptures(getSelectedLocation());
                 loadLocationOptions();
                 console.log('Datos cargados correctamente:', captures);
-
-                // Iniciar actualizaciones periódicas
             }
+
             startRealTimeUpdates();
         })
         .catch(error => {
             console.error('Error:', error);
-            // Mostrar mensaje de error al usuario
             document.getElementById('captures-container').innerHTML = `
                 <div class="error-message">
                     Error al cargar los datos. Por favor, intente nuevamente.
@@ -31,8 +30,13 @@ function fetchCaptures() {
         });
 }
 
-// Función para renderizar las capturas
-// Función para renderizar las capturas con imágenes
+// Función para obtener la ubicación seleccionada actualmente
+function getSelectedLocation() {
+    const select = document.getElementById('location-select');
+    return select ? select.value : 'all';
+}
+
+// Función para renderizar las capturas (con filtro opcional)
 function renderCaptures(filterLocation = 'all') {
     const container = document.getElementById('captures-container');
     container.innerHTML = '<div class="loader">Cargando datos...</div>';
@@ -53,7 +57,6 @@ function renderCaptures(filterLocation = 'all') {
         const captureElement = document.createElement('div');
         captureElement.className = 'capture-card';
 
-        // HTML con la imagen incluida
         captureElement.innerHTML = `
             <div class="image-container">
                 <img src="${capture.imageUrl}" alt="Captura de ${capture.location}" class="capture-image" 
@@ -97,15 +100,12 @@ function updateStatistics(captures) {
 function loadLocationOptions() {
     const select = document.getElementById('location-select');
 
-    // Limpiar opciones existentes excepto la primera
     while (select.options.length > 1) {
         select.remove(1);
     }
 
-    // Obtener ubicaciones únicas ordenadas
     const locations = [...new Set(captures.map(c => c.location))].sort();
 
-    // Añadir opciones
     locations.forEach(location => {
         const option = document.createElement('option');
         option.value = location;
@@ -118,11 +118,43 @@ function loadLocationOptions() {
 function startRealTimeUpdates() {
     setInterval(() => {
         console.log('Actualizando datos en tiempo real...');
-        fetchCaptures(); // Vuelve a cargar los datos
-    }, 30000); // Actualizar cada 30 segundos (ajustable)
+        fetchCaptures();
+    }, 30000); // cada 30 segundos
 }
 
-// Inicializar al cargar la página
+// Evento para iniciar la captura
+document.getElementById('start-btn').addEventListener('click', () => {
+    const url = document.getElementById('url-input').value;
+
+    if (!url) {
+        alert('Por favor, introduce una URL');
+        return;
+    }
+
+    fetch('/capture/start', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'text/plain'
+        },
+        body: url
+    })
+        .then(response => response.text())
+        .then(data => {
+            alert(`Captura iniciada: ${data}`);
+        })
+        .catch(error => {
+            console.error('Error al iniciar captura:', error);
+            alert('Error al iniciar captura');
+        });
+});
+
+// Inicializar todo cuando cargue la página
 document.addEventListener('DOMContentLoaded', () => {
     fetchCaptures();
+
+    // Escuchar cambios en el selector de ubicación
+    document.getElementById('location-select').addEventListener('change', function () {
+        const selectedLocation = this.value;
+        renderCaptures(selectedLocation);
+    });
 });
