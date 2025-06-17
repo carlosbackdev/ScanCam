@@ -1,6 +1,7 @@
 package com.scancam.Task;
 
 import com.scancam.model.UserModel;
+import com.scancam.service.CityService;
 import com.scancam.service.DataService;
 import com.scancam.service.UserService;
 import org.slf4j.Logger;
@@ -22,6 +23,9 @@ public class DataCaptureRunner implements ApplicationRunner {
     @Autowired
     UserService userService;
 
+    @Autowired
+    CityService cityService;
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
         LOG.info("Lista de caputuras:");
@@ -31,6 +35,10 @@ public class DataCaptureRunner implements ApplicationRunner {
         LOG.info("Lista de usuarios:");
         userService.getAllUsers().forEach(user ->{
            LOG.info(user.toString());
+        });
+        LOG.info("Lista de ciudades:");
+        cityService.getAllCities().forEach(city ->{
+            LOG.info(city.toString());
         });
     }
 }

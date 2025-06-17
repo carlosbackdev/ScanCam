@@ -1,16 +1,16 @@
 package com.scancam.data;
 
 import com.scancam.model.CaptureModel;
-import com.scancam.repository.CaptureRepository;
+import com.scancam.model.CityModel;
 import com.scancam.service.ComputerVisionService;
 import com.scancam.service.DataService;
+import com.scancam.service.CityService;
 import com.scancam.utils.FormateText;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import org.apache.commons.text.WordUtils;
 
 @Component
 public class DataSave {
@@ -18,6 +18,9 @@ public class DataSave {
 
     @Autowired
     private DataService dataService;
+
+    @Autowired
+    private CityService cityService;
 
     public void saveData(String filename, String url) {
 
@@ -33,6 +36,8 @@ public class DataSave {
 
         dataService.saveData(captureModel);
         System.out.println("Data saved successfully: " + captureModel);
+
+        cityService.cityExistByName(captureModel);
 
     }
     public long getPeopleCount(String filename) {

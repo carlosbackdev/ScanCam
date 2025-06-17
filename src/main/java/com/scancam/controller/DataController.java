@@ -1,53 +1,28 @@
 package com.scancam.controller;
 
 import com.scancam.model.CaptureModel;
-import com.scancam.model.UserModel;
 import com.scancam.service.DataService;
-import com.scancam.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
 import java.util.List;
 
-@RestController
-@RequestMapping("data")
+@Controller
 public class DataController {
 
     @Autowired
     private DataService dataService;
 
-    @GetMapping("obtener")
-    public ResponseEntity<List<CaptureModel>> getData() {
-        if(dataService.getData() != null) {
-            var data = dataService.getData();
-            System.out.println("Datos enviados: " + data);
-            return ResponseEntity.ok(data);
-        }
 
-        return ResponseEntity.status(404).body(null);
+    @GetMapping("/")
+    public String getData(Model model) {
+        model.addAttribute("captures",dataService.getData());
+        return "index";
     }
 
-    @GetMapping("delete/all")
-    public ResponseEntity<String> deleteAllData() {
-        try {
-            dataService.deleteAllData();
-            return ResponseEntity.ok("All data deleted successfully");
-        } catch (Exception e) {
-            System.err.println("Error deleting data: " + e.getMessage());
-            return ResponseEntity.status(500).body("Error deleting data: " + e.getMessage());
-        }
-    }
-
-    @Autowired
-    UserService userService;
-
-    @GetMapping("saveUser")
-    public String saveData() {
-        userService.saveUser();
-        System.out.println("Data saved successfully");
-        return "Data saved successfully";
-    }
 
 }

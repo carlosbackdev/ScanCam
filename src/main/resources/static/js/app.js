@@ -3,7 +3,7 @@ let captures = [];
 
 // Función principal para obtener datos
 function fetchCaptures() {
-    fetch('/data/obtener')
+    fetch('api/data/obtener')
         .then(response => {
             if (!response.ok) throw new Error('Error al obtener datos');
             return response.json();
@@ -15,10 +15,7 @@ function fetchCaptures() {
                 captures = dataList;
                 renderCaptures(getSelectedLocation());
                 loadLocationOptions();
-                console.log('Datos cargados correctamente:', captures);
             }
-
-            startRealTimeUpdates();
         })
         .catch(error => {
             console.error('Error:', error);
@@ -29,6 +26,8 @@ function fetchCaptures() {
             `;
         });
 }
+// Función para actualizaciones en tiempo real
+setInterval(fetchCaptures, 5000);
 
 // Función para obtener la ubicación seleccionada actualmente
 function getSelectedLocation() {
@@ -114,39 +113,6 @@ function loadLocationOptions() {
     });
 }
 
-// Función para actualizaciones en tiempo real
-function startRealTimeUpdates() {
-    setInterval(() => {
-        console.log('Actualizando datos en tiempo real...');
-        fetchCaptures();
-    }, 30000); // cada 30 segundos
-}
-
-// Evento para iniciar la captura
-document.getElementById('start-btn').addEventListener('click', () => {
-    const url = document.getElementById('url-input').value;
-
-    if (!url) {
-        alert('Por favor, introduce una URL');
-        return;
-    }
-
-    fetch('/capture/start', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'text/plain'
-        },
-        body: url
-    })
-        .then(response => response.text())
-        .then(data => {
-            alert(`Captura iniciada: ${data}`);
-        })
-        .catch(error => {
-            console.error('Error al iniciar captura:', error);
-            alert('Error al iniciar captura');
-        });
-});
 
 // Inicializar todo cuando cargue la página
 document.addEventListener('DOMContentLoaded', () => {
