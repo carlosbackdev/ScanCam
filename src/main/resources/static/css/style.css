@@ -213,7 +213,7 @@ body {
     flex-wrap: wrap;
 }
 
-#url-input {
+#url-input, #camera-url {
     padding: 10px;
     font-size: 1rem;
     width: 300px;
@@ -222,7 +222,7 @@ body {
     border-radius: 5px;
 }
 
-#start-btn {
+#start-btn, #startth{
     padding: 10px 20px;
     background-color: var(--primary-color);
     color: white;
@@ -236,3 +236,4 @@ body {
 #start-btn:hover {
     background-color: #3367d6;
 }
+

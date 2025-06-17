@@ -1,14 +1,14 @@
 package com.scancam.controller;
 
 import com.scancam.model.CaptureModel;
+import com.scancam.model.UserModel;
 import com.scancam.service.DataService;
+import com.scancam.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -38,6 +38,16 @@ public class DataController {
             System.err.println("Error deleting data: " + e.getMessage());
             return ResponseEntity.status(500).body("Error deleting data: " + e.getMessage());
         }
+    }
+
+    @Autowired
+    UserService userService;
+
+    @GetMapping("saveUser")
+    public String saveData() {
+        userService.saveUser();
+        System.out.println("Data saved successfully");
+        return "Data saved successfully";
     }
 
 }

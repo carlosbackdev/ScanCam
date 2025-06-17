@@ -27,8 +27,6 @@ public class DataService {
             List<CaptureModel> captures = captureRepository.findAll();
             if (captures.isEmpty()) {
                 System.out.println("No data found.");
-            } else {
-                System.out.println("Data retrieved successfully: " + captures);
             }
             return captures;
         } catch (Exception e) {

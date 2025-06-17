@@ -12,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-
 public class ComputerVisionService {
 
     private final ImageAnalysisClient client;
@@ -31,10 +30,8 @@ public class ComputerVisionService {
     }
     public long countPeopleInImage(String imagePath) {
         try {
-            // Cargar la imagen desde el archivo local
             BinaryData imageData = BinaryData.fromBytes(Files.readAllBytes(Path.of(imagePath)));
 
-            // Configurar las opciones de análisis
             ImageAnalysisResult result = client.analyze(
                     imageData,
                     List.of(VisualFeatures.PEOPLE),
@@ -42,9 +39,6 @@ public class ComputerVisionService {
             );
 
             var peopleResult = result.getPeople();
-            System.out.println("People detected: " + peopleResult.toString());
-            System.out.println("People detected: " + peopleResult.getValues().toString());
-            System.out.println("People detected: " + peopleResult.getValues().size());
             int peopleCount=peopleResult.getValues().size();
 
             return peopleCount;

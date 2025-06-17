@@ -4,6 +4,7 @@ import com.scancam.model.CaptureModel;
 import com.scancam.repository.CaptureRepository;
 import com.scancam.service.ComputerVisionService;
 import com.scancam.service.DataService;
+import com.scancam.utils.FormateText;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,28 +21,30 @@ public class DataSave {
 
     public void saveData(String filename, String url) {
 
-
-        ComputerVisionService computerVisionService = new ComputerVisionService();
-        long peopleCount = computerVisionService.countPeopleInImage(filename);
-
         captureModel = new CaptureModel();
         captureModel.setImageUrl(filename);
-        captureModel.setPeople(peopleCount);
+        captureModel.setPeople(getPeopleCount(filename));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss dd-MM-yyyy");
         captureModel.setDate(LocalDateTime.parse(LocalDateTime.now().format(formatter), formatter));
-        int lastSlashIndex = url.lastIndexOf("/");
-        int secondLastSlashIndex = url.lastIndexOf("/", lastSlashIndex - 1);
-        String city = url.substring(secondLastSlashIndex + 1, lastSlashIndex);
-        city=WordUtils.capitalize(city);
+        String city= FormateText.extractCity(url);
         captureModel.setCity(city);
-        int indexlast = url.lastIndexOf("/");
-        String location = url.substring(indexlast + 1, url.lastIndexOf(".html"));
-        location=location.replace("-", " ");
-        location=WordUtils.capitalize(location);
+        String location = FormateText.extractLocation(url);
         captureModel.setLocation(location);
 
         dataService.saveData(captureModel);
         System.out.println("Data saved successfully: " + captureModel);
 
+    }
+    public long getPeopleCount(String filename) {
+        ComputerVisionService computerVisionService = new ComputerVisionService();
+        long peopleCount = 0;
+        try{
+            peopleCount = computerVisionService.countPeopleInImage(filename);
+
+        }catch (Exception e) {
+            System.err.println("Error initializing ComputerVisionService: " + e.getMessage());
+            return 0;
+        }
+        return peopleCount;
     }
 }
