@@ -13,5 +13,7 @@ public class CityModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String temperature;
+    private double temperature;
+    private String condition;
+    private String icon;
 }

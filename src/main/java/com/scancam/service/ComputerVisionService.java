@@ -12,25 +12,34 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+@Service
 public class ComputerVisionService {
 
     private final ImageAnalysisClient client;
 
-    @Value("${azure.vision.endpoint}")
-    private String endpoint;
-
-    @Value("${azure.vision.key}")
-    private String key;
 
     public ComputerVisionService() {
         this.client = new ImageAnalysisClientBuilder()
-                .endpoint(endpoint)
-                .credential(new AzureKeyCredential(key))
+                .endpoint("https://aifoundryresour.cognitiveservices.azure.com/")
+                .credential(new AzureKeyCredential("FqP6zfUPmfGnpHqoKwhdPIX9kHD7OX7xA0uvrl5dROhW5YeRAhkpJQQJ99BFACYeBjFXJ3w3AAAAACOGa1WJ"))
                 .buildClient();
     }
     public long countPeopleInImage(String imagePath) {
+        // Si la ruta empieza con "/assets/", conviértela a la ruta real
+        if (imagePath.startsWith("/assets/")) {
+            imagePath = "src/main/resources/static" + imagePath;
+        }
+        System.out.println("Iniciando análisis de imagen: " + imagePath);
+        Path path = Path.of(imagePath).toAbsolutePath();
+        System.out.println("Ruta absoluta: " + path);
         try {
-            BinaryData imageData = BinaryData.fromBytes(Files.readAllBytes(Path.of(imagePath)));
+            if (!Files.exists(path)) {
+                System.err.println("El archivo no existe: " + path);
+                return -1;
+            }
+            BinaryData imageData = BinaryData.fromBytes(Files.readAllBytes(path));
+            System.out.println("Analizando imagen: " + path);
+            System.out.println("Tamaño de la imagen: " + imageData.getLength());
 
             ImageAnalysisResult result = client.analyze(
                     imageData,
@@ -39,10 +48,11 @@ public class ComputerVisionService {
             );
 
             var peopleResult = result.getPeople();
-            int peopleCount=peopleResult.getValues().size();
+            int peopleCount = peopleResult.getValues().size();
 
             return peopleCount;
         } catch (Exception e) {
+            e.printStackTrace();
             System.err.println("Error al analizar la imagen: " + e.getMessage());
             return -1;
         }

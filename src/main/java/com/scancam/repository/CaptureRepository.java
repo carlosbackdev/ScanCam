@@ -8,4 +8,5 @@ import java.util.List;
 
 @Repository
 public interface CaptureRepository extends JpaRepository<CaptureModel, Long> {
+    List<CaptureModel> findByCity(String city);
 }

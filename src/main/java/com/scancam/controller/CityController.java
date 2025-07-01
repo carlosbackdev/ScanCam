@@ -27,20 +27,4 @@ public class CityController {
         }
     }
 
-    @GetMapping("updateTemperatue")
-    public ResponseEntity<String> updateCityTemperature() {
-        try {
-            for(CityModel city: cityService.getAllCities()){
-                //metodo que busca la temperatura dela ciudad
-                city.setTemperature("10");
-                //
-                cityService.updateCity(city);
-            }
-            return ResponseEntity.ok("City temperature updated successfully");
-        } catch (Exception e) {
-            System.err.println("Error updating city temperature: " + e.getMessage());
-            return ResponseEntity.status(500).body("Error updating city temperature: " + e.getMessage());
-        }
-    }
-
 }

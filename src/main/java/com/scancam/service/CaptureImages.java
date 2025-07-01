@@ -93,6 +93,14 @@ public class CaptureImages extends Thread{
                 System.err.println("Error al copiar el archivo: " + e.getMessage());
             }
             System.out.println("Captura guardada como: " + filename);
+            // Pequeña espera para que guarde la foto
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                e.printStackTrace();
+            }
+
 
         } finally {
             // Cerrar el navegador

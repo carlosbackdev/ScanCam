@@ -22,6 +22,9 @@ public class DataSave {
     @Autowired
     private CityService cityService;
 
+    @Autowired
+    private ComputerVisionService computerVisionService;
+
     public void saveData(String filename, String url) {
 
         captureModel = new CaptureModel();
@@ -41,7 +44,6 @@ public class DataSave {
 
     }
     public long getPeopleCount(String filename) {
-        ComputerVisionService computerVisionService = new ComputerVisionService();
         long peopleCount = 0;
         try{
             peopleCount = computerVisionService.countPeopleInImage(filename);

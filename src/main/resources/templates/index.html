@@ -11,12 +11,6 @@
 <div class="dashboard">
     <header class="header">
         <h1>Monitor de Afluencia en Tiempo Real</h1>
-        <!-- Formulario para introducir la URL de la cámara por fetch
-        <div class="url-form">
-            <input type="text" id="url-input" placeholder="Introduce la URL de la cámara">
-            <button id="start-btn">Iniciar Captura</button>
-        </div>
-        -->
         <!-- Formulario para introducir la URL de la cámara por th en controller normal -->
         <form th:action="@{/captureth}" method="post" class="url-form">
             <input type="text" id="camera-url" name="url" placeholder="Introduce la URL de la cámara" required>
@@ -45,17 +39,6 @@
     <div class="captures-grid" id="captures-container">
         <!-- Capturas generadas con JS -->
     </div>
-    <!--
-    <div class="captures-grid">
-        <div class="capture-card" th:each="capture : ${captures}">
-            <img th:src="@{${capture.imageUrl}}" alt="Capture Image">
-            <div class="capture-info">
-                <span class="capture-location" th:text="${capture.location}">Ubicación</span>
-                <span class="capture-time" th:text="${capture.date}">Fecha y Hora</span>
-            </div>
-        </div>
-    </div>
-    -->
 
     <div class="real-time-indicator">
         <span class="pulse"></span>

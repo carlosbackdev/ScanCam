@@ -22,7 +22,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/login").permitAll() // permite CSS y login
+                        .requestMatchers("/css/**", "/login","/api").permitAll() // permite CSS y login
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
